@@ -9,6 +9,7 @@ import Language.Libconfig.Bindings
 import System.Console.CmdArgs
 
 import Boostat.HTTP (getBoost)
+import Boostat.SQL (storeData, getData)
 
 data Args = Args{configFile :: String} deriving (Show, Data, Typeable)
 
@@ -33,12 +34,12 @@ main' a = do
   conf <- case c of
     Nothing -> throwE "can't read config"
     Just x  -> return x
-  liftIO $ print conf
-  return ()
-  liftIO $ print =<< getBoost (username conf) (password conf) (boostId conf)
-
-
-
+  currentStat <- liftIO 
+                 $ getBoost (username conf) (password conf) (boostId conf)
+  liftIO $ print currentStat
+  storeData (database conf) currentStat
+  stats <- getData (database conf)
+  liftIO $ print stats
 
 parseArgs :: Args
 parseArgs = Args{configFile = "./boostat.conf" &= help "Config file"}

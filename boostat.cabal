@@ -23,6 +23,8 @@ executable boostat
     base         >= 4.7 && <4.8,
     bytestring   >= 0.10.4.0,
     cmdargs      == 0.10.*,
+    HDBC         == 2.4.*,
+    HDBC-sqlite3 == 2.3.*,
     http-conduit == 2.1.*,
     libconfig    == 0.3.*,
     network      == 2.6.*,
