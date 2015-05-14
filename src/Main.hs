@@ -36,7 +36,7 @@ main' a = do
 
 parseArgs :: Args
 parseArgs = Args{configFile = "./boostat.conf" &= help "Config file"}
-            &= summary "boostat 0.0.1"
+            &= summary "boostat 0.1.0.0"
 
 readConfig :: String -> MaybeT IO AppConf
 readConfig f = do
