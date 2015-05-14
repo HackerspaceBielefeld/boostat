@@ -7,6 +7,7 @@ import Control.Monad.Trans.Maybe (MaybeT(..), runMaybeT)
 import Control.Monad.Trans.Except (throwE, ExceptT(..), runExceptT)
 import Language.Libconfig.Bindings
 import System.Console.CmdArgs
+import System.IO
 
 import Boostat.HTTP (getBoost)
 import Boostat.SQL (storeData, getData)
@@ -26,7 +27,7 @@ main = do
   r <- runExceptT (main' a)
   case r of
     (Right ()) -> return ()
-    (Left  e ) -> print e
+    (Left  e ) -> hPutStrLn stderr $ "error: " ++ e
 
 main' :: Args -> ExceptT String IO ()
 main' a = do
@@ -34,7 +35,7 @@ main' a = do
   conf <- case c of
     Nothing -> throwE "can't read config"
     Just x  -> return x
-  currentStat <- liftIO 
+  currentStat <- liftIO
                  $ getBoost (username conf) (password conf) (boostId conf)
   liftIO $ print currentStat
   storeData (database conf) currentStat
