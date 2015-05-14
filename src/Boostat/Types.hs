@@ -23,4 +23,3 @@ data Record = Record
   , ausgezahlt  :: Integer
   } deriving (Show)
 
-
