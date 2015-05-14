@@ -11,15 +11,7 @@ import System.IO
 
 import Boostat.HTTP (getBoost)
 import Boostat.SQL (storeData, getData)
-
-data Args = Args{configFile :: String} deriving (Show, Data, Typeable)
-
-data AppConf = AppConf
-  { username :: String
-  , password :: String
-  , boostId  :: String
-  , database :: String
-  } deriving (Show)
+import Boostat.Types
 
 main :: IO ()
 main = do
