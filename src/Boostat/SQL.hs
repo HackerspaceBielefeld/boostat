@@ -6,18 +6,28 @@ import Control.Monad.Trans.Except (ExceptT(..), throwE)
 import Database.HDBC
 import Database.HDBC.Sqlite3 (connectSqlite3, Connection)
 
+insQuery :: String
+insQuery = "INSERT INTO boostat "
+        ++ "(date, gesamt, offen, bestaetigt, freigegeben, ausgezahlt) "
+        ++ "VALUES (DATETIME(\"NOW\",\"utc\"),?,?,?,?,?)"
+
 storeData :: String -> [Integer] -> ExceptT String IO ()
-storeData db [a,b,c,d,e] = do
+storeData db r@[_,_,_,_,_] = do
   c <- openDb db
-  return ()
+  hdbcToExcept "can't write to DB: " $ do
+    run c insQuery (map toSql r)
+    commit c
 storeData _  _           = throwE "can't read boost stats"
 
 getData :: String -> ExceptT String IO [[Integer]]
-getData db = throwE "db read not implemented yet"
+getData db = do
+  c <- openDb db
+  hdbcToExcept "can't read from DB: " $ return [[]]
 
 openDb :: String -> ExceptT String IO Connection
-openDb db = hdbcToExcept ("can't connect to " ++ db) $ connectSqlite3 db
+openDb db = hdbcToExcept ("can't connect to " ++ db ++ ": ")
+  $ connectSqlite3 db
 
 hdbcToExcept :: String -> IO a -> ExceptT String IO a
-hdbcToExcept s e = ExceptT
-  $ handleSql (const $ return $ Left s) $ liftM Right e
+hdbcToExcept s a = ExceptT
+  $ handleSql (\e -> return $ Left $ s ++ seErrorMsg e) $ liftM Right a
