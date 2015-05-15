@@ -1,5 +1,5 @@
 # boostat
-poll the statistics of a boos-project.com charity and generate a graph
+Poll the statistics of a boost-project.com charity and generate a graph from 
+the data.
 
-## ToDo
-* gerate graph
+Pull requests and issue reports are welcome!
