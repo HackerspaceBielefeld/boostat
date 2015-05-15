@@ -45,6 +45,10 @@ readConfig f = do
   p <- MaybeT $ configLookupString c "password"
   b <- MaybeT $ configLookupString c "boostId"
   d <- MaybeT $ configLookupString c "database"
-  return AppConf{username = u, password = p, boostId = b, database = d}
+  n <- MaybeT $ configLookupString c "charity"
+  return AppConf
+    {username = u, password = p, boostId = b
+    ,database = d, charity  = n
+    }
 
 

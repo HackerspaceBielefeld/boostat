@@ -12,6 +12,7 @@ data AppConf = AppConf
   , password :: String
   , boostId  :: String
   , database :: String
+  , charity  :: String
   } deriving (Show)
 
 data Record = Record
