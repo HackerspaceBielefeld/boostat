@@ -17,6 +17,7 @@ cabal-version:       >=1.10
 
 executable boostat
   main-is:             Main.hs
+  ghc-options:         -O2 -Wall
   -- other-modules:
   -- other-extensions:
   build-depends:
