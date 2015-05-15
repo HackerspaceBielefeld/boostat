@@ -1,14 +1,15 @@
-{-# LANGUAGE DeriveDataTypeable #-}
-
 module Main where
 
 import Control.Monad.IO.Class (liftIO)
 import Control.Monad.Trans.Maybe (MaybeT(..), runMaybeT)
 import Control.Monad.Trans.Except (throwE, ExceptT(..), runExceptT)
+import Data.ByteString.Lazy (hPut)
+import Graphics.Rendering.Chart.Backend.Diagrams (renderableToSVGString)
 import Language.Libconfig.Bindings
 import System.Console.CmdArgs
 import System.IO
 
+import Boostat.Chart (genChart)
 import Boostat.HTTP (getBoost)
 import Boostat.SQL (storeData, getData)
 import Boostat.Types
@@ -29,10 +30,11 @@ main' a = do
     Just x  -> return x
   currentStat <- liftIO
                  $ getBoost (username conf) (password conf) (boostId conf)
-  liftIO $ print currentStat
   storeData (database conf) currentStat
   stats <- getData (database conf)
-  liftIO $ print stats
+  liftIO $ do
+    (chrt,_) <- renderableToSVGString (genChart (charity conf) stats) 1000 500
+    hPut stdout chrt
 
 parseArgs :: Args
 parseArgs = Args{configFile = "./boostat.conf" &= help "Config file"}
