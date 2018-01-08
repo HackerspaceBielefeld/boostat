@@ -1,3 +1,5 @@
+# this code is not under active development and not working with the current website.
+
 # boostat
 Poll the statistics of a boost-project.com charity and generate a graph from 
 the data.
